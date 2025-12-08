@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import pymysql
+from decouple import config
+
+# Используем PyMySQL вместо mysqlclient
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-inco2wl@5ndfn$%&e&5c8xa^th=^xcdwbjh(-#gqz$7tvsj$#_'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-inco2wl@5ndfn$%&e&5c8xa^th=^xcdwbjh(-#gqz$7tvsj$#_')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -78,9 +83,22 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'utility': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': config('DB_UTILITY_HOST', default='localhost'),
+        'PORT': config('DB_UTILITY_PORT', default='3306'),
+        'USER': config('DB_UTILITY_USER', default=''),
+        'PASSWORD': config('DB_UTILITY_PASSWORD', default=''),
+        'NAME': config('DB_UTILITY_NAME', default=''),
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
+# Database router для распределения моделей по БД
+DATABASE_ROUTERS = ['bboard.db_router.DatabaseRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

@@ -22,3 +22,19 @@ class Meta:
     verbose_name_plural = 'Рубрики'
     verbose_name = 'Рубрика'
     ordering = ['name']
+
+# Модель для базы данных на Jino.ru (utility)
+class SiteLog(models.Model):
+    action = models.CharField(max_length=100, verbose_name='Действие')
+    description = models.TextField(verbose_name='Описание')
+    ip_address = models.GenericIPAddressField(null=True, blank=True, verbose_name='IP адрес')
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Создано')
+    
+    class Meta:
+        verbose_name_plural = 'Логи сайта'
+        verbose_name = 'Лог сайта'
+        ordering = ['-created_at']
+        db_table = 'site_logs'
+    
+    def __str__(self):
+        return f"{self.action} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
