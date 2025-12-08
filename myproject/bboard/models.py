@@ -1,4 +1,10 @@
 from django.db import models
+from django.core.validators import (
+    MinValueValidator, MaxValueValidator,
+    MinLengthValidator, MaxLengthValidator,
+    EmailValidator, URLValidator,
+    RegexValidator, DecimalValidator
+)
 
 class Bb(models.Model):
     title = models.CharField(max_length=50, verbose_name='Товар')
@@ -149,6 +155,97 @@ class Student(models.Model):
     class Meta:
         verbose_name_plural = 'Студенты'
         verbose_name = 'Студент'
+        ordering = ['name']
+    
+    def __str__(self):
+        return self.name
+
+# Модель для демонстрации стандартных валидаторов Django
+class Product(models.Model):
+    """Модель Товар с различными валидаторами Django"""
+    
+    # Валидаторы для строковых полей
+    name = models.CharField(
+        max_length=100,
+        verbose_name='Название товара',
+        validators=[
+            MinLengthValidator(3, message='Название должно содержать минимум 3 символа'),
+            MaxLengthValidator(100, message='Название не должно превышать 100 символов'),
+        ]
+    )
+    
+    # Валидатор для email
+    supplier_email = models.EmailField(
+        verbose_name='Email поставщика',
+        validators=[EmailValidator(message='Введите корректный email адрес')]
+    )
+    
+    # Валидатор для URL
+    product_url = models.URLField(
+        blank=True,
+        verbose_name='Ссылка на товар',
+        validators=[URLValidator(message='Введите корректный URL')]
+    )
+    
+    # Валидаторы для числовых полей
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name='Цена',
+        validators=[
+            MinValueValidator(0.01, message='Цена должна быть больше 0'),
+            MaxValueValidator(9999999.99, message='Цена не должна превышать 9999999.99'),
+        ]
+    )
+    
+    # Валидатор для IntegerField
+    quantity = models.IntegerField(
+        verbose_name='Количество',
+        validators=[
+            MinValueValidator(0, message='Количество не может быть отрицательным'),
+            MaxValueValidator(10000, message='Количество не должно превышать 10000'),
+        ]
+    )
+    
+    # Валидатор с регулярным выражением для телефона
+    phone_validator = RegexValidator(
+        regex=r'^\+?1?\d{9,15}$',
+        message='Телефон должен быть в формате: +79991234567'
+    )
+    supplier_phone = models.CharField(
+        max_length=20,
+        blank=True,
+        verbose_name='Телефон поставщика',
+        validators=[phone_validator]
+    )
+    
+    # Валидатор с регулярным выражением для артикула
+    article_validator = RegexValidator(
+        regex=r'^[A-Z]{2}\d{6}$',
+        message='Артикул должен быть в формате: AB123456 (2 буквы + 6 цифр)'
+    )
+    article = models.CharField(
+        max_length=10,
+        unique=True,
+        verbose_name='Артикул',
+        validators=[article_validator]
+    )
+    
+    # Валидатор для процента скидки
+    discount_percent = models.IntegerField(
+        default=0,
+        verbose_name='Процент скидки',
+        validators=[
+            MinValueValidator(0, message='Скидка не может быть отрицательной'),
+            MaxValueValidator(100, message='Скидка не может превышать 100%'),
+        ]
+    )
+    
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
+    
+    class Meta:
+        verbose_name_plural = 'Товары'
+        verbose_name = 'Товар'
         ordering = ['name']
     
     def __str__(self):
