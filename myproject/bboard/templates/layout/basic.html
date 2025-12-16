@@ -15,6 +15,7 @@
     <nav>
         <a href="{% url 'index' %}">Главная</a>
         <a href="{% url 'add' %}">Добавить</a>
+        <a href="{% url 'recipe_list' %}">Рецепты</a>
         {% for rubric in rubrics %}
             <a href="{% url 'rubric_bbs' rubric.pk %}">{{ rubric.name }}</a>
         {% endfor %}
