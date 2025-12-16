@@ -1,5 +1,17 @@
 ## Доска объявлений на Django
 
+<img width="1154" height="737" alt="изображение" src="https://github.com/user-attachments/assets/c7fe565d-0fd9-4792-8212-d66d45ad9aa6" />
+
+Мы добавили вкладку с рецептами 
+
+<img width="1072" height="713" alt="изображение" src="https://github.com/user-attachments/assets/86b7dc5c-ff7f-4d61-b8c0-5f260b31dcd9" />
+
+Можно делать различные действия с рецептами 
+
+<img width="1352" height="796" alt="изображение" src="https://github.com/user-attachments/assets/9a13b219-90a7-4431-953d-5e5e7fb030c1" />
+
+
+
 <img width="607" height="250" alt="изображение" src="https://github.com/user-attachments/assets/86bc8afa-8937-4532-8efd-f2c1940d7795" />
 
 
