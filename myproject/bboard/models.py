@@ -256,6 +256,21 @@ class Product(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
     
+    # Поля для демонстрации миграций
+    rating = models.DecimalField(
+        max_digits=3,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name='Рейтинг',
+        validators=[
+            MinValueValidator(0.0, message='Рейтинг не может быть отрицательным'),
+            MaxValueValidator(5.0, message='Рейтинг не может превышать 5.0'),
+        ]
+    )
+    is_featured = models.BooleanField(default=False, verbose_name='Рекомендуемый товар')
+    views_count = models.IntegerField(default=0, verbose_name='Количество просмотров')
+    
     class Meta:
         verbose_name_plural = 'Товары'
         verbose_name = 'Товар'
